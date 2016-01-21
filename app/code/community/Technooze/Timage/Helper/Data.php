@@ -358,7 +358,17 @@ class Technooze_Timage_Helper_Data extends Mage_Core_Helper_Abstract
         
         if((!file_exists($this->img) || !is_file($this->img)) && !empty($this->placeHolder))
         {
-            $this->imagePath($this->placeHolder);
+            if($adminPlaceholder = Mage::getStoreConfig("catalog/placeholder/image_placeholder")){
+                
+                $adminPlaceholder = Mage::getBaseDir('media') .DS."catalog".DS."product".DS."placeholder".DS. $adminPlaceholder;
+                
+                if(file_exists($adminPlaceholder) && is_file($adminPlaceholder)){
+                    $this->img = $adminPlaceholder;
+                }
+            } else {
+                $this->img = Mage::getBaseDir('skin') .DS."frontend".DS."base".DS."default".DS."images".DS."catalog".DS."product".DS."placeholder".DS."image.jpg";
+            }
+            
             $this->placeHolder = false;
         }
     }
